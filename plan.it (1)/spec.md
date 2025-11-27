@@ -1,0 +1,524 @@
+# Plan.it
+
+## Overview
+An event planning application designed for catering companies to manage events, clients, venues, and staff with automated reminder system. Features a prominently displayed calendar view optimized for event visualization, staff assignment capabilities with position-based filtering, email template management for streamlined communication, Google Maps Distance Matrix API integration for accurate distance/cost calculation for travel planning to venues, user profile management with data management capabilities, menu management system for customizing available menu items with subcategory management, fully operational inventory management system for tracking items and pricing with event cost integration and collapsible category organization, customizable staffing rules configuration with custom position creation and conditional rules, customizable event add-ons system, venue services management, and three distinct color schemes selectable throughout the application. The application is fully responsive and adapts to different screen sizes and device types (desktop, tablet, mobile) with optimized layouts and touch-friendly interfaces. All users have full access to create and manage clients, menu items, events, and staff without any authorization restrictions or approval requirements. Events can be edited after creation with full update capabilities.
+
+## Core Features
+
+### Navigation
+- **Redesigned top navigation with Overview icon displayed next to the calendar icon at the top of the page**
+- **Hamburger menu (three horizontal dashes) positioned in the top-right corner**
+- **Hamburger menu opens a narrower dropdown that doesn't extend excessively across the screen, containing navigation links with their original icon graphics in this order: Clients, Venues, Staff, Inventory, Templates, Archive, Profile**
+- **Each navigation item in the dropdown displays its corresponding original icon alongside the title for visual clarity**
+- **Narrower dropdown menu design that maintains proper proportions and doesn't span too wide across the screen**
+- **Calendar icon and Overview icon positioned on the left side of the top navigation bar with appropriate text labels**
+- **Clean, streamlined top navigation bar with calendar icon, Overview icon, and hamburger menu visible**
+
+### Event Management
+- Create new events with basic information (name, guest count as main detail field immediately after name and client selection, date, time, venue selection from directory, client assignment)
+- **Enhanced venue persistence ensuring that when a user creates and saves an event with a selected venue, the chosen venue is preserved and properly displayed when reopening the event for editing**
+- **Fixed venue selection logic in event creation and editing to ensure selected venues are correctly stored in the backend and accurately retrieved when editing events**
+- **Enhanced calendar interaction: when creating or editing an event, clicking a date in the calendar view automatically sets that date as the event date and immediately closes the calendar component**
+- **Calendar with automatic date selection and closure behavior for streamlined event date setting during creation and editing workflows**
+- Event creation dialog must properly load all required fields and options without opening to blank pages
+- In-dialog client and venue creation during event creation flow with ability to create new clients and venues without leaving the event creation dialog, saving them directly to the app with robust error handling to prevent "failed to save client" errors and ensure proper data persistence
+- Fixed client creation issue ensuring clients created during event creation are properly saved and available across the entire application
+- Edit events after creation with full update capabilities for all event details including name, guest count, date, time, venue, client assignment, staff assignments, menu selections, and all other event properties
+- **Updated backend event functions with simplified `updateEvent` and `createEvent` implementations that properly handle event data with correct field mapping and staff array preservation**
+- **Enhanced event update logic with corrected `updateEvent` function that properly preserves existing `staff` array from the original event when updating event details**
+- **Updated event creation function that initializes new events with empty `staff` array and proper field mapping for all event properties**
+- **Event update function retrieves existing event from the `events` map, preserves existing `staff` array from the original event, creates updated event with new details while maintaining staff assignments, and returns success or error result**
+- **Fixed staff assignment preservation ensuring all staff assignment values remain stable and persist correctly through edits without being lost or cleared**
+- **Corrected backend `updateEvent` function implementation that maintains staff assignments by preserving the existing `staff` array from the original event instead of overwriting with empty values**
+- **Enhanced `openEventModal` function in `src/assets/app.js` that properly pre-checks staff checkboxes when editing an existing event by resetting all checkboxes first and then marking the ones whose values match any in `event.assignedStaff`**
+- **Enhanced `saveEvent` function in `src/assets/app.js` that properly collects `assignedStaff` values by gathering all checked staff values into an `assignedStaff` array, preserving current assigned staff from existing event if editing and array is empty, and explicitly adding the `assignedStaff` field to the payload**
+- **Corrected fetch or canister call (e.g. `actor.updateEvent`) to include the `assignedStaff` field ensuring it is transmitted with the rest of the event details for permanent staff assignment persistence**
+- **Verified synchronization between the `EditEventDialog` frontend component and backend event update logic ensuring the assigned staff array is accurately maintained on edit or update operations**
+- **Fixed staff assignment persistence logic ensuring staff assigned to an event remain assigned until manually removed, with no overwriting or disappearance after saving**
+- **Enhanced backend staff assignment persistence ensuring assignments are correctly stored and retrieved without automatic removal or clearing unless explicitly unassigned by the user**
+- EditEventDialog with fully scrollable and responsive interface that displays the complete event details view without any freezing or scroll lock issues, allowing users to easily navigate through all event fields and sections with stable, reliable scrolling behavior across all device types (desktop, tablet, mobile)
+- Fixed event editing system ensuring the entire event details view is displayed and fully scrollable without interface freezing, providing smooth navigation through all event fields and maintaining responsive design
+- **Fixed "Update Event" button in EditEventDialog with proper visual hierarchy ensuring no update status text or loading indicators render over or occlude the button, with adjusted z-index, spacing, and animation timing to maintain clear UI presentation**
+- **Fixed event details layout ensuring both "Edit" and any action buttons remain fully visible and are never pushed off screen, with proper button positioning and responsive layout management**
+- Fully functional event editing logic that allows users to properly edit all event details with a scrollable, well-formatted popup that displays the entire event content without interface issues
+- **View event details dialog accessible from events overview and archived events with comprehensive display of all event information including assigned staff (names and positions), complete menu breakdown (categories, items, subcategories, serving times, notes), special requests, payment details (down payment and full payment amounts with payment status checkboxes/toggles), venue services, and all other event-related information**
+- **Event detail dialog shows complete staff assignments with staff member names and their assigned positions clearly displayed**
+- **Full menu breakdown in event details showing all selected menu categories, individual items, subcategories, serving times, and notes in organized format**
+- **Payment section in event details displaying both down payment and full payment amounts with corresponding checkboxes or toggles indicating payment status, formatted clearly and prominently**
+- Delete events from both overview and event details views
+- Assign events to specific clients
+- **Fully responsive calendar interface that adapts gracefully to all screen sizes without appearing squished on computer displays, maintaining proper proportions and readability across desktop, tablet, and mobile devices**
+- **Calendar with optimized layout that scales appropriately for larger screens while maintaining visual organization and centered layout**
+- Calendar interface with visually organized, centered layout that neatly displays up to three client last names per day for scheduled events with no overlap or crowding, ensuring optimal visual presentation and readability while fitting neatly within its container without requiring scrolling
+- Calendar with date selection that keeps selected dates highlighted (not just outlined) for clear visibility of the currently viewed day
+- Month-changing navigation buttons with arrow icons (< and >) positioned centrally above the calendar for visually balanced layout that maintains the calendar's centered appearance
+- Events overview table with columns in order: Date, Client Name, Guest Count, Venue, Staff, and View Details button for each event, fully responsive design with horizontal scrolling capability to ensure all columns are visible without data being cut off on smaller screens
+- Events overview organized by event date (soonest first) by default with option to sort by client name (A-Z)
+- Automatic archiving of past events (events with dates before today) so they are no longer shown in main list but accessible in archive section
+- **Fully reinstated and implemented staffing calculator logic in the backend that dynamically generates staff requirements based on guest count and user-defined staffing rules including conditional rules and event add-ons**
+- **Integrated staffing calculator logic into both event creation and editing workflows in the frontend, automatically displaying required staff fields when guest count is entered or add-ons are selected**
+- **Staffing calculator uses user-defined rules and extras to create structured position fields that are visible and assignable in event details with proper backend persistence**
+- **Updated EditEventDialog component to properly display and update staffing information with stable scrollable layouts and error-free rendering**
+- **Event details page accurately displays assigned staff and calculated required positions after saving changes with synchronized updates across all views**
+- **Automatic staff position generation that creates the correct number and type of staff positions when guest count is entered during event creation and editing, based on user-defined staffing rules and conditional rules**
+- **Reliable automatic staff generation logic that creates editable assignment fields populated with existing staff members who match the required positions, with comprehensive error handling and validation**
+- **Fixed staff assignment persistence ensuring staff assignments are correctly stored in the backend and properly retrieved when reopening events, with assignments persisting correctly across sessions and views without save failures or UI freezing**
+- **Enhanced backend logic for staff assignments with corrected persistence functions that properly maintain staff assignments once assigned to events, ensuring assignments remain saved and are not automatically removed or cleared unless explicitly unassigned by the user**
+- **Staff assignment operations that correctly update both frontend and backend records and remain visible after saving or refreshing with verified data integrity**
+- **Redesigned staff assignment section within event details featuring a clean, tiered layout that adapts gracefully for large events with 10+ staff members**
+- **Staff assignment UI uses condensed or expandable views for optimal space utilization and readability when managing multiple staff positions**
+- **Staff names and roles are neatly contained within organized, responsive layout that prevents overflow and maintains visual clarity**
+- **Individual input fields for each staff position required in the event, generated dynamically based on staffing rules with organized, space-efficient presentation**
+- **Dropdown menus for each position listing available staff members who match that role, allowing users to select from eligible staff with position-based filtering**
+- **Responsive dropdown menus that are visually consistent with the current theme and easy to use even for large events with many staff positions**
+- **Real-time updates ensuring selected staff assignments are saved correctly and displayed cleanly within event details and editing dialogs with synchronized data across all views**
+- **Generated staff fields appear within event details allowing users to easily assign existing staff members to specific positions using position-filtered dropdowns**
+- **All staff assignment operations execute smoothly without validation blocks, access control restrictions, or conflicting logic that could prevent proper functionality**
+- **Complete code cleanup of event-staff assignment functionality to remove redundant or interfering logic, ensuring reliable execution in both event creation and editing dialogs**
+- **Synchronized staff assignment updates across all views ensuring consistency between event details, overview tables, and calendar displays**
+- Assign staff members to events with ability to add or remove staff from each event during creation and editing
+- Staff assignments must be properly created and saved for events with reliable backend persistence and robust error handling
+- Assign staff to specific positions within events using position-filtered dropdowns that show only eligible staff members for each role and close when clicking outside, even if no selection is made
+- **Intact double-booking prevention logic that disallows assigning the same staff member to overlapping events based on event date/time logic**
+- **Intact prevention logic that disallows staff from being assigned to multiple positions within the same event**
+- **Display clear UI warnings when assignment attempts violate double-booking rules for overlapping events or multiple positions in the same event**
+- Display staff assignments and positions in event details with editing capabilities
+- Customizable daily event limit with user-defined maximum number of events per day configured in profile settings with notification display if limit is exceeded
+- **Enhanced menu selection system in event creation and editing with "Add Category" dropdown menu displaying all user-created menu items for selection**
+- **Compact dropdown menu for menu items that is only slightly wider than the icons and associated labels for a streamlined appearance**
+- **When a menu item is selected from the "Add Category" dropdown, it is automatically added to the event and any associated subcategories appear for detailed input**
+- **For each added menu item, Start Serving Time and End Serving Time fields with functional time selection, notes section for additional details, and "Add Item" option for adding multiple details under a single menu item**
+- **Improved dropdown menu styling and interactivity for an intuitive step-based workflow that feels smooth and professional**
+- **Automatic subcategory population ensures complete menu item details are captured and displayed in event information**
+- For each menu item selected in event creation and editing dialogs, include "Begin Serving Time" and "End Serving Time" fields with **fixed scrollable time selection component featuring proper mouse wheel and touch scrolling functionality that works correctly for selecting hours and minutes**
+- **Fixed time selection dropdowns throughout the application with corrected scrolling logic that supports natural mouse wheel scrolling and touch gestures for fluid interaction through hour and minute options**
+- **Improved time picker interface with reliable scrolling capability that responds to mouse wheel events and touch gestures anywhere within the dropdown area without requiring direct scrollbar manipulation**
+- Menu items selected for events are always visible in event details with ability to add multiple details for each selected item based on the predefined subcategory structure during creation and editing
+- Event creation flow supports "Add item" option for each selected menu item (like in edit mode) for streamlined creation with automatic display of subcategories for selected menu items defined by the user in management
+- All menu item details are displayed in the event details view with subcategories shown under their main menu items with editing capabilities
+- Special Request section in event details for user input during creation and editing
+- Customizable event add-ons system where users can select from user-created optional add-ons during event creation and editing, replacing preset bar, busser, and food runner checkboxes
+- Event add-ons (such as "bar" or other user-created services) can be selected during event creation and editing, dynamically integrating them into event details and automatically triggering associated staff requirements through the staffing calculator
+- **Google Maps Distance Matrix API integration for precise distance and travel cost calculation using dedicated Google Maps endpoint to reliably calculate exact round-trip distances between the user's saved address and venue addresses**
+- **Automatic round-trip calculation that doubles the one-way driving route distance and multiplies by user's cost per mile input to determine total trip cost**
+- **Elimination of all MapQuest fallback logic to prevent inconsistencies and ensure reliable distance calculation using only Google Maps Distance Matrix API**
+- Enhanced date picker popup in event creation and editing dialogs that is larger, less squished, and visually consistent with the app's theme for better usability, responsive across all screen sizes
+- **Fixed scrollable time selection component with corrected TimePicker.tsx logic ensuring both mouse wheel and touch scrolling events work properly for selecting hours and minutes throughout all time picker fields**
+- **Time picker dropdowns with reliable scrolling functionality that responds naturally to mouse wheel and touch gestures without requiring scrollbar manipulation**
+- Touch-enabled time picker that allows smooth scrolling anywhere on the time list without requiring the scrollbar, with modern, visually appealing dropdown styling
+- In event creation and editing dialogs, when adding a new venue, provide an "Add Venue" button (adds venue to event only) and a "Save Venue" checkbox (saves venue to the database) instead of a solid "Save Venue" bar
+- Real-time staff requirement display that updates automatically when guest count changes, showing required vs assigned staff counts for each position
+- Thoroughly verified and corrected backend and API logic to ensure saving, loading, and viewing of events, clients, staff, and menu data works error-free
+- **Payment Details section in event details view with input fields for Down Payment and Full Payment amounts, and checkboxes or toggles to indicate whether each payment has been made**
+- **Payment tracking indicators in event details showing deposit and full payment status with input fields for deposit amount and total event cost with editing capabilities**
+- **Fully integrated inventory cost calculation system that automatically calculates total event costs based on selected inventory items assigned to menu items, with real-time cost display in event creation and editing dialogs**
+- **Event cost summary display showing breakdown of inventory item costs and total event cost calculation with automatic updates when inventory items are selected or modified**
+- Venue services selection during event creation and editing allowing users to attach relevant services from the venue's available services to each event
+- Display selected venue services in event details with editing capabilities
+- **Event creation and editing dialogs with improved section order: Menu Details section positioned above Event Details section for better logical flow**
+- **Complete event details view displaying all information including staff assignments, menu items with serving times, special notes, payment details, venue services, and all other event-related information**
+
+### Client Management
+- Create and manage client profiles with separate first and last name fields, phone number, email and address
+- Optimized client list loading with improved performance and reduced lag when viewing clients
+- View all events associated with each client
+- Track client contact information including email and physical address
+- Display clients in clean, spreadsheet-style list format with rows showing all relevant client details and actions (edit, delete, etc.) in alphabetical order by last name, responsive table design that adapts to smaller screens
+- Search and filter clients by first name, last name, or contact information
+- Edit existing client details with separate first and last name fields
+- Delete client profiles
+- Responsive dialog operations for client editing with proper state management and user feedback
+- Robust client creation and persistence operations with comprehensive error handling to prevent save failures and ensure proper data flow between frontend and backend
+- Client creation accessible to all users without any authorization restrictions or approval requirements
+- Fixed client creation logic to ensure new clients added during event creation are properly saved and retrievable via the backend with complete resolution of client creation issues
+
+### Venue Directory
+- Add new venues with detailed information
+- View all venues in the directory with compact, column-based display format showing venue information in smaller, organized layout to make it easier to view multiple entries at once
+- Edit existing venue details
+- Delete venues from the directory
+- **Automatic removal of venue services from events when venues are deleted to prevent placeholder remnants and maintain data integrity**
+- Track venue information including name, address, phone number, bar availability, bar cover, ice machine availability, food runner requirements, and user-created venue services
+- Display venue services directly within each venue's information in the venue tab showing all services assigned to that venue
+- Display calculated distance and round-trip travel cost for each venue in venue details using Google Maps Distance Matrix API integration for precise calculations with proper display of total round-trip mileage and accurate distance calculations
+- Real-time address auto-complete and geolocation validation using Google Maps API to recognize, validate, and resolve addresses as the user types in venue details
+- **Venue services assignment interface in venue creation and editing dialogs allowing users to select from user-created services managed in the Profile section**
+- **Clean, organized venue services selection interface similar to staff position assignment with dropdown or checkbox selection from available services**
+- **Display assigned services visibly in venue information cards within the Venue tab**
+
+### Staff Management
+- Create staff member profiles with separate first and last name fields, phone number, email, positions selected from available job positions (both predefined and custom), joined date, and optional pay rate field
+- Staff creation must be properly implemented with reliable backend persistence and comprehensive error handling to ensure new staff can be created and saved successfully
+- Reliably save and display selected staff positions when creating new staff members with proper backend persistence, robust error handling, and clear user feedback
+- View all staff members with complete profile information including separate first and last names, their assigned positions, and pay rate
+- Staff section must load properly without errors and display all staff members reliably with comprehensive error handling
+- Edit existing staff member details including all profile fields with separate first and last name fields, pay rate, and reliable position saving and display with robust error handling
+- Add and remove multiple positions for each staff member with proper persistence using available job positions (both predefined and custom) and comprehensive error handling
+- Delete staff members with proper error handling and user feedback
+- **Automatic removal of staff assignments from events when staff members are deleted to prevent placeholder remnants and maintain data integrity**
+- Assign staff members to events with position-based assignments and robust error handling during event creation and editing
+- View which events each staff member is assigned to
+- Filter staff by position when assigning to event positions, showing only eligible staff for each role
+- Responsive dialog operations for staff editing with proper state management, robust error handling, and user feedback
+- All staff CRUD operations must be fully functional with comprehensive error handling, validation, and clear user feedback for failures
+- Staff creation accessible to all users without any authorization restrictions or approval requirements
+
+### Menu Management
+- Menu Management section accessible from main navigation for customizing available menu items
+- Display all current user-created menu items (no preset menu items) - all listed items are automatically visible for event creation
+- Add new custom menu items with subcategory field configurations that immediately appear in event creation dialogs
+- Edit existing menu item names and subcategory structures with ability to add subcategories after initial creation
+- Add, edit, and remove subcategories for menu items with full CRUD functionality
+- Remove menu items from the system (with confirmation for items currently used in events)
+- **Automatic removal of menu items from events when menu items are deleted to prevent placeholder remnants and maintain data integrity**
+- Real-time updates to event creation dialogs when new menu items are created
+- Organize menu items by category or type for better management
+- Preview of how menu items will appear in event creation interface
+- Menu item management accessible to all users without any authorization restrictions or approval requirements
+- Fixed backend logic for saving and retrieving new menu items to ensure dynamic appearance in event creation dialogs
+- Updated user management section allowing users to create and manage new menu items, including adding, editing, and deleting subcategories for each menu item with automatic appearance as selectable options during event creation
+- Ensure new menu items and their subcategories appear dynamically when creating events
+- Display subcategories under their main menu items when creating events
+- **Compact, list-oriented layout for menu items display in the Profile page that uses less vertical space while maintaining all current CRUD functionality**
+
+### Inventory Management
+- **Fully operational inventory management system replacing any placeholder components with complete functionality**
+- **Inventory tab accessible from main navigation for managing inventory items with full CRUD functionality and stable, reliable interface**
+- **Add new inventory items with required name field, optional details field, and optional cost field with robust form validation and error handling**
+- **Edit existing inventory items including name, description, and cost with proper data persistence**
+- **Delete inventory items from the system with confirmation dialogs and proper cleanup**
+- **Display all inventory items in organized table format with sortable columns showing item name, details, cost, and assigned menu item**
+- **Assign each inventory item to an existing user-created menu item with dropdown selection and proper linking for accurate cost calculations**
+- **View inventory items organized by assigned menu item with filtering and search capabilities**
+- **Search and filter inventory items by name, details, or assigned menu item**
+- **Inventory item assignment to menu items with proper relationship management and data integrity**
+- **Complete integration with event cost calculation system allowing selected inventory items to contribute to total event costs**
+- **Real-time cost calculation based on inventory items assigned to selected menu items in events**
+- **Automatic calculation of total event costs from selected inventory items with proper linking between inventory items and menu items**
+- **Integration with event creation and editing dialogs showing inventory-based cost calculations and summaries**
+- **Robust API and UI state handling to prevent crashes, blank screens, or loading issues when managing inventory items**
+- **Complete removal of any restrictions, validation issues, or missing dependencies that could prevent proper inventory management execution**
+- **Collapsible category organization where each category defaults to collapsed state and users can click category headers to expand or collapse, showing or hiding items within each category**
+
+### Staff Position Management
+- Reliable "Add Job Position" feature in Profile section with full CRUD functionality that allows users to dynamically create, view, and assign custom job positions
+- Add new staff positions that become available for assignment during event creation without any hardcoded or backend-defined constraints
+- Edit existing staff position names and details
+- Delete custom staff positions (with validation to prevent deletion of positions currently in use)
+- **Automatic removal of job positions from staff profiles and events when positions are deleted to prevent placeholder remnants and maintain data integrity**
+- View all available staff positions (both predefined and custom)
+- Ensure newly created positions are immediately available in staff assignment dropdowns and persist properly
+- Staff position management accessible to all users without any authorization restrictions or approval requirements
+- Remove all hardcoded or backend-defined job position constraints that might prevent creation
+- Ensure job positions persist properly and can be assigned to staff members
+
+### User Profile Management
+- User profile section accessible from main navigation or dashboard
+- **Color scheme selection interface moved to the Profile page for easier access with three distinct color schemes selectable throughout the application**
+- "Delete All Data" feature with confirmation dialog to prevent accidental deletion
+- Delete all events, clients, and venues from the application when confirmed
+- Customizable daily event limit setting allowing users to define maximum number of events that can be booked per day with validation and notification system
+- Enhanced staffing rules configuration system allowing users to define custom staff count requirements by guest count ranges with position-specific assignments and conditional rules
+- Interactive staffing rules interface where users can set minimum and maximum guest counts for each rule and specify required staff counts for specific positions (Team Lead, Kitchen, Server, Bar Tender, etc.)
+- **Fixed input field functionality in staffing rules allowing users to delete and replace the default number "1" with any custom value when defining staff positions, ensuring proper input field behavior and value editing**
+- Advanced conditional staffing rules system that allows users to create additional conditions with proper spacing and formatting to eliminate text overlap between "count" and "position" fields in extra conditions
+- Fixed layout in StaffingRulesManagement component ensuring "count" and "position" fields in extra conditions do not overlap and all text fits neatly within their respective boxes with clean, responsive interface across device sizes
+- Reliable submission and saving of extra conditions for staffing rules without errors
+- User-created event add-ons selectable as "extra conditions" for staffing rules
+- Organized "Current Rules" section where users can add guest count ranges, assign specific required positions for each range, and designate additional optional staff positions that only populate when related add-ons are selected during event creation
+- Conditional rules interface for creating extra staffing conditions based on event characteristics (e.g., venue features, selected add-ons, special requirements)
+- Live preview of staffing requirements showing how rules will apply to different guest count scenarios including conditional rules
+- Ability to add, edit, and delete custom staffing rules and conditional rules with validation to prevent overlapping guest count ranges
+- Real-time validation and feedback when creating or editing staffing rules and conditional rules
+- Event Add-ons section in profile tab where users can create, edit, and remove optional add-ons that replace preset bar, busser, and food runner options
+- Custom add-ons management with ability to define add-on names and associated optional staff positions
+- **Venue Services Management section in Profile tab functioning similar to Job Positions management, allowing users to create venue services by name only (e.g., "Dumpster", "Bar") without requiring venue, details, or cost fields**
+- **Clean, organized venue services creation interface in Profile section with simple name input field and add/remove functionality similar to job positions management**
+- **Display all user-created venue services in Profile section with edit and delete capabilities**
+- **Venue services created in Profile section become available for assignment to specific venues in the Venue tab**
+- User profile UI matches current app theme and is easily accessible, responsive design for all screen sizes
+- Dynamic staffing logic implementation: when a guest count is entered during event creation, automatically calculate and display the number of staff required for that event based on existing staffing rules and conditional rules
+- Reliable "Add Job Position" feature for creating custom job positions that can be assigned to staff members
+- Feature for creating menu items with subcategories (e.g., Soda → Coke, Pepsi, Sprite) in Profile tab, displayed in the event creation dialogs
+- **Compact, list-oriented layout for menu items display in the Profile page that uses less vertical space while maintaining all current CRUD functionality**
+- Cleaned up profile section interface with removal of explanatory texts for a cleaner, more streamlined user experience
+
+### Distance and Travel Cost Calculation
+- Store user's saved address for distance calculations
+- Allow user to input and modify per-mile cost value for travel calculations
+- **Google Maps Distance Matrix API integration for precise geocoding and routing functionality to reliably calculate exact round-trip distances between user-entered locations**
+- **Automatic calculation of one-way driving route using Google Maps Distance Matrix API with elimination of all MapQuest fallback logic to prevent inconsistencies**
+- **Round-trip distance calculation that automatically doubles the one-way route distance and multiplies by user's cost per mile to determine total travel cost**
+- Real-time address auto-complete and geolocation validation in travel settings using Google Maps API to recognize, validate, and resolve addresses as the user types, ensuring precise travel cost calculations
+- Calculate precise round-trip distance from user's saved address to selected venues using Google Maps Distance Matrix API integration from frontend with accurate distance calculations
+- Display calculated distance and round-trip travel cost in venue details with proper mileage display and accurate calculations
+- Show distance and travel cost information in event creation dialogs when venue is selected with accurate calculations
+- Round-trip cost calculation based on computed distance multiplied by user-inputted per-mile cost with accurate distance measurements
+
+### Event Staff Positions
+- Support both predefined job positions (Team Lead, Kitchen, Server, Bar Tender, etc.) and custom user-created positions
+- **Fully reinstated and operational dynamic generation of required positions based on user-defined staffing rules including conditional rules and guest count with comprehensive error handling and validation**
+- **Reliable automatic staff position generation that creates the correct number and type of positions when guest count is entered, with proper backend persistence and frontend display**
+- **Generated staff assignment fields are properly populated with existing staff members who match the required positions, with position-filtered dropdowns showing only eligible staff**
+- **All staff assignment operations execute without validation blocks, access control restrictions, or conflicting logic**
+- **Synchronized staff assignment display and updates across event details, overview tables, and calendar views**
+- Add and remove multiple positions per event with ability to add multiples of each position type as needed during creation and editing
+- Assign staff to specific positions using dropdowns filtered by staff position that show only eligible staff members during creation and editing
+- Display position assignments in event details with editing capabilities
+- Staff members can have multiple positions assigned to their profile from available job positions (both predefined and custom)
+- For each auto-generated position, provide assignment fields with filtered staff dropdowns during creation and editing
+- Real-time staff requirement calculation using user-defined staffing rules and conditional rules that updates as guest count changes
+- Live display of required vs assigned staff counts for each position with visual indicators for unfilled positions during creation and editing
+- Optional staff positions that only appear when related add-ons are selected during creation and editing
+- Conditional staff position generation based on event characteristics and user-defined conditional rules
+- Fully implemented staff assignments within event details where entering guest count automatically generates the number and type of staff positions required per existing staffing rules
+- Generated staff position fields can be populated with staff members who are already in the system
+
+### Event Details Tracking
+- Define required event details that must be confirmed (menu selection, guest count, special requirements, etc.) excluding table setup
+- Each event detail has its own input field for entering specific information beyond just confirmation status during creation and editing
+- Mark details as confirmed or pending for each event during creation and editing
+- Track completion status and specific information for all required details per event
+- "Staff Assigned" detail automatically confirmed when all required staff positions for an event have been filled based on user-defined staffing rules and conditional rules
+- UI displays "Staff Assigned" instead of "Service Staff Count" throughout the application
+- **Payment Details tracking with Down Payment and Full Payment input fields and checkboxes or toggles to indicate payment status**
+
+### Automated Reminder System
+- Monitor events approaching the 1-month deadline
+- Automatically identify events with missing or unconfirmed details
+- Highlight events that are within 1 month of the event date and have outstanding items
+- Generate notifications for users about pending confirmations
+- Clickable urgent notification positioned in the top right corner that opens a dropdown menu listing all urgent notices, responsive positioning for mobile devices
+- Each urgent notice in the dropdown is clickable and navigates to the relevant section for resolution
+
+### Email Template Management
+- Create and draft email templates with custom titles for easy identification
+- Save email templates for reuse
+- Edit existing email templates
+- Delete email templates
+- View all saved email templates in an organized list
+- Copy email template body to clipboard with dedicated copy button
+
+### Spreadsheet-Style Dashboard
+- Display all clients in a table format with separate first and last name columns, email and address information in alphabetical order by last name, responsive table design
+- Show associated events for each client
+- List remaining unconfirmed details for each event
+- Provide visual indicators for urgent items (within 1-month window)
+- Allow quick navigation to view specific events or details
+- Show/hide columns functionality
+- Display assigned staff for each event
+- **Dashboard interface without "Event Planning Dashboard" text in header area for cleaner appearance**
+
+### Event Archive
+- Archive section for accessing past events (events with dates before today)
+- View archived events separately from active events
+- Maintain all event details and functionality for archived events with editing capabilities
+
+### User Interface
+- **Redesigned top navigation with Overview icon displayed next to the calendar icon at the top of the page and hamburger menu (three horizontal dashes) positioned in the top-right corner that opens a narrower dropdown containing navigation links with their original icon graphics in order: Clients, Venues, Staff, Inventory, Templates, Archive, Profile**
+- **Each navigation item in the dropdown displays its corresponding original icon alongside the title for visual clarity and improved user experience**
+- **Narrower dropdown menu design that maintains proper proportions and doesn't extend excessively across the screen**
+- **Calendar icon and Overview icon positioned on the left side of the top navigation bar with appropriate text labels, with previous navigation icons removed from main view and displayed only within the hamburger dropdown menu**
+- **Clean, streamlined top navigation bar featuring the calendar icon, Overview icon, and hamburger menu for improved user experience**
+- **Three distinct color schemes selectable throughout the application with smooth, stable switching between color variants**
+- **Current light sunset-inspired gradient background with white and purple accents maintained as one of the three color scheme options**
+- **Two additional distinct color schemes integrated alongside the existing one, ensuring all three are visually consistent and selectable**
+- **Complete removal of any previously deleted dark/light mode logic to ensure clean, stable color scheme switching functionality**
+- **All three color schemes maintain responsive, attractive design consistency across all UI components and views**
+- **Color scheme selection interface moved to the Profile page for easier access**
+- Light, visually clear sunset-inspired gradient background with more white and a clear gradient throughout all pages and components for a warm, modern appearance, featuring a bolder, more vibrant purple in the gradient while keeping the overall look light, soft, and non-distracting, with minimal pink and a clear sunset-inspired effect
+- The new purple accent in the background is visually present but not overwhelming, maintaining harmony with the existing purple text and buttons
+- Updated purple text, button, and highlight colors with higher contrast and improved readability while maintaining visual appeal against the gradient background
+- Polished, visually appealing design with cohesive look using the updated purple color scheme with enhanced contrast for better readability
+- Consistent light sunset gradient background with more white and bolder purple accents across all views including calendar, dashboard, dialogs, navigation, and user profile with no black or dark background colors
+- All dialogs and popups use the updated gradient background and lighter theme with purple accents applied consistently
+- All text and UI elements remain readable and visually appealing against the light sunset gradient background with the updated purple color palette featuring improved contrast
+- Subtle gradient that does not distract from content while providing a visually appealing and inviting look with consistent purple accent application
+- Reorganized navigation for smooth event planning, client management, staff coordination workflows
+- **Fully responsive calendar view with theme-matching interface that adapts gracefully to all screen sizes without appearing squished on computer displays, maintaining proper proportions and visual organization**
+- **Calendar interface optimized for desktop displays with appropriate sizing and spacing while remaining responsive for mobile and tablet devices**
+- All forms and displays updated to use separate first and last name fields
+- Event creation forms with guest count as main detail field positioned immediately after event name and client selection
+- All dropdown menus throughout the application close when clicking outside, even if no selection is made
+- Loading spinners and toast notifications during save operations to provide user feedback and prevent duplicate actions
+- Distance and travel cost information displayed clearly in venue details and event dialogs using Google Maps Distance Matrix API integration with proper mileage display and accurate calculations
+- Enhanced date picker popup that is larger, less squished, and visually consistent with the app's theme for better usability throughout all date selection fields
+- **Fixed scrollable time selection component with corrected TimePicker.tsx logic ensuring both mouse wheel and touch scrolling events work properly for selecting hours and minutes throughout all time picker fields in the application**
+- **Time selection dropdowns with reliable scrolling functionality that responds naturally to mouse wheel events and touch gestures anywhere within the dropdown area for fluid interaction without requiring direct scrollbar manipulation**
+- **Improved time picker interface with proper scrolling capability through hour and minute options using natural interaction methods**
+- Touch-enabled time picker with modern, visually appealing dropdown styling that allows smooth scrolling anywhere on the time list without requiring the scrollbar
+- Fully responsive design using Tailwind CSS and React best practices with device detection and responsive breakpoints
+- Automatic adaptation to different screen sizes and device types (desktop, tablet, mobile) with optimized layouts
+- Calendar, dialogs, tables, and navigation components that fit and scale appropriately for smaller screens without horizontal scrolling
+- All interactive elements remain accessible and visually clear across all device sizes
+- Touch-friendly interface with larger tap targets and adaptive layouts for mobile devices
+- Optimized user experience for both touch and mouse input
+- Mobile-first responsive design approach ensuring optimal display on all devices
+- Optimized event editing performance and scrolling behavior across all device types (desktop, tablet, mobile)
+- Clean, responsive interface across device sizes with proper alignment of visual and interactive elements in the "Edit Event" window and "Extra Conditions" layout to eliminate text overlap
+- **Fixed "Update Event" dialog visual hierarchy ensuring no update status text or loading indicators render over or occlude the "Update Event" button with proper z-index, spacing, and animation timing**
+- **Fixed event details layout ensuring both "Edit" and any action buttons remain fully visible and are never pushed off screen, with proper button positioning and responsive layout management**
+- Application content language: English
+- Clean interface without unnecessary descriptive text
+- **Dashboard interface without "Event Planning Dashboard" text in header area for cleaner appearance**
+
+## Data Storage (Backend)
+- Client information with separate first and last name fields, phone number, email addresses, and physical addresses
+- Event details including dates, times, venue assignments from directory, client assignments, guest count as main field, event type information, editable event names, archive status, selected add-ons from user-created options, deposit amount, total event cost, payment status indicators, selected venue services, and inventory-based cost calculations
+- **Enhanced event storage with corrected `staff` array preservation ensuring staff assignments remain stable and persist correctly through event updates without being lost or cleared**
+- **Updated backend event data structure with simplified field mapping for `updateEvent` and `createEvent` functions that properly handle event properties and staff array preservation**
+- **Enhanced venue storage in events ensuring selected venues are properly preserved and accurately retrieved when editing events**
+- **Payment details including Down Payment and Full Payment amounts with payment status indicators for each payment type**
+- Venue directory with name, address, phone number, bar availability, bar cover, ice machine availability, food runner requirements, and attached user-created venue services displayed within venue information
+- **Venue services assignments linking user-created services to specific venues with proper relationship management and automatic cleanup when venues are deleted**
+- Staff member information with separate first and last name fields, phone number, email, multiple positions array from available job positions (both predefined and custom) properly saved and retrieved with reliable persistence and comprehensive error handling, joined date, and optional pay rate
+- **Enhanced staff assignments to events with many-to-many relationships and position assignments with corrected and thoroughly reviewed backend persistence logic ensuring assignments remain saved and are not automatically removed or cleared unless explicitly unassigned by the user, with comprehensive error handling and synchronized data storage across all views with automatic cleanup when staff are deleted**
+- **Staff assignment persistence data that correctly updates both frontend and backend records and remains visible after saving or refreshing with verified data integrity**
+- **Staff double-booking prevention data tracking staff assignments to overlapping events based on event date/time logic and multiple position assignments within the same event with intact validation logic**
+- **Event staff position requirements generated dynamically based on user-defined staffing rules and conditional rules, properly stored and retrieved with comprehensive validation and synchronized updates**
+- User-created menu items only (no preset menu items) with names and subcategory field configurations with real-time synchronization for event creation dialogs
+- **Menu item subcategories with full CRUD functionality for adding, editing, and removing subcategories after menu item creation with automatic cleanup when menu items are deleted**
+- **Enhanced menu item selection data with Start Serving Time, End Serving Time, notes section, and multiple item details for each selected menu item with proper backend persistence**
+- **Fully operational inventory items storage with item name, optional detail/description, price, and assignment to existing menu items with proper linking for accurate cost calculations and event integration**
+- **Inventory item relationships with menu items for accurate cost calculation and event cost integration**
+- **Event cost data linking selected inventory items to events with automatic total calculation based on proper item-menu linking and real-time cost updates**
+- **Inventory category organization data for collapsible category display with default collapsed state**
+- Available job positions including both predefined positions (Team Lead, Kitchen, Server, Bar Tender, etc.) and custom user-created positions without hardcoded constraints
+- **Custom staff positions created by users with full CRUD functionality and proper persistence with automatic cleanup when positions are deleted**
+- User-defined staffing rules with guest count ranges and required staff counts for specific positions
+- **Fixed staffing rules data storage ensuring input field values can be properly edited and replaced, allowing users to delete and modify default values**
+- User-defined conditional staffing rules with additional conditions based on event characteristics (e.g., venue features, selected add-ons) with proper formatting to prevent text overlap and reliable submission and saving
+- Optional staff positions that are associated with specific add-ons and only appear when those add-ons are selected
+- User-created event add-ons with names and associated optional staff positions, replacing preset bar, busser, and food runner options, available as selectable conditions for staffing rules
+- **User-created venue services with names only (no venue, details, or cost fields) stored in Profile section and available for assignment to specific venues with automatic cleanup when services are deleted**
+- **Venue services created in Profile section with proper CRUD functionality and immediate availability for venue assignment**
+- Event staff positions with available position types (both predefined and custom), dynamically generated based on user-defined staffing rules including conditional rules and guest count, staff-to-position assignments, and support for multiple positions of each type
+- Event requirements with both confirmation status and detailed information fields (excluding table setup)
+- Tracking of which details are completed vs pending with specific information for each event
+- Email templates with titles and content for reuse
+- Menu details with dynamic sections based on user-created menu items and their subcategory configurations
+- Begin serving time and end serving time for each menu item
+- Multiple details for each selected menu item based on subcategory structure
+- Special request information for each event
+- User's saved address for distance calculations
+- Per-mile cost value for travel cost calculations
+- Calendar selected date state for highlighting currently viewed day
+- Urgent notification data with clickable navigation information for each notice
+- Customizable daily event limit setting configured by user
+- User-defined staffing rules with position-specific requirements and optional staff associations with add-ons
+- User-defined conditional staffing rules with additional conditions and requirements with proper layout formatting
+- **Color scheme preference data storing user's selected color scheme choice with persistence across sessions**
+
+## Key Operations (Backend)
+- CRUD operations for clients with separate first and last name fields, alphabetical sorting by last name, search functionality, and optimized loading for improved performance
+- Robust client creation and persistence operations with comprehensive error handling to prevent "failed to save client" errors and ensure proper data flow between frontend and backend
+- Fixed client creation logic to ensure new clients added during event creation are properly saved and retrievable via the backend with complete resolution of client creation issues
+- CRUD operations for venues in the directory with venue services attachment and compact, column-based display formatting
+- Display venue services directly within venue information in the venue tab
+- **CRUD operations for venue services assignment allowing users to select from user-created services and assign them to specific venues during venue creation and editing**
+- **Operations to display assigned venue services in venue information cards with proper relationship management**
+- **Automatic cleanup operations that remove venue services from events when venues are deleted to prevent placeholder remnants**
+- Full CRUD operations for events including create, read, update, and delete with venue selection from directory, editable event names, guest count as main field, time, location, selected add-ons from user-created options, deposit amount, total cost, payment status, venue services selection, and inventory cost integration
+- **Updated backend event operations with simplified `updateEvent` and `createEvent` function implementations that properly handle event data with correct field mapping and staff array preservation**
+- **Enhanced event update operations with corrected `updateEvent` function that properly preserves existing `staff` array from the original event when updating event details**
+- **Updated event creation operations that initialize new events with empty `staff` array and proper field mapping for all event properties**
+- **Event update operations that retrieve existing event from the `events` map, preserve existing `staff` array from the original event, create updated event with new details while maintaining staff assignments, and return success or error result**
+- **Enhanced venue persistence operations in events ensuring selected venues are correctly stored and accurately retrieved when editing events**
+- **Enhanced calendar interaction operations: when creating or editing an event, clicking a date in the calendar view automatically sets that date as the event date and immediately closes the calendar component**
+- **Calendar date selection and closure operations for streamlined event date setting during creation and editing workflows**
+- **Payment details operations for storing and retrieving Down Payment and Full Payment amounts with payment status tracking**
+- Reliable event creation and update operations that properly load all required fields and options in the creation and editing dialogs
+- Fully functional event editing operations that allow users to properly edit all event details with comprehensive backend support for all event properties and stable scrollable interface
+- **Enhanced menu item selection operations with dropdown functionality that adds selected menu items to events and automatically populates associated subcategories**
+- **Operations to store and retrieve Start Serving Time, End Serving Time, notes section, and multiple item details for each selected menu item with proper backend persistence**
+- **Automatic subcategory population operations that display all associated subcategories when menu items with subcategories are selected during event creation and editing**
+- CRUD operations for staff members with separate first and last name fields, complete profile information including email, multiple positions from available job positions (both predefined and custom) properly saved and retrieved with reliable persistence and comprehensive error handling, joined date, and optional pay rate
+- Reliable staff creation and persistence operations to ensure new staff can be created and saved successfully with comprehensive error handling and clear user feedback
+- Staff section loading operations that work reliably without errors and display all staff members properly with robust error handling
+- **Automatic cleanup operations that remove staff assignments from events when staff members are deleted to prevent placeholder remnants**
+- **Fully reinstated and operational staffing calculator backend logic that dynamically generates staff requirements based on guest count and user-defined staffing rules including conditional rules and event add-ons**
+- **Staffing calculator operations that use user-defined rules and extras to create structured position fields with proper backend persistence and synchronized updates**
+- **Automatic staff position generation operations that correctly create required positions based on user-defined staffing rules and conditional rules when guest count is provided, with proper backend storage and retrieval**
+- **Staff assignment field population operations that reliably load existing staff members into generated position fields with position-based filtering and comprehensive error handling**
+- **Complete removal of validation blocks, access control restrictions, and conflicting logic that could prevent staff assignment or event update operations**
+- **Comprehensive code cleanup of all event-staff assignment backend logic to eliminate redundant or interfering operations and ensure synchronized data across views**
+- Manage staff assignments to events with position-based assignments using available job positions (both predefined and custom) during creation and editing with comprehensive error handling
+- **Enhanced staff assignment persistence operations ensuring assignments are correctly stored in the backend and properly retrieved when reopening events, with assignments remaining saved and not automatically removed or cleared unless explicitly unassigned by the user**
+- **Staff assignment operations that correctly update both frontend and backend records and remain visible after saving or refreshing with verified data integrity**
+- **Staff double-booking validation operations that prevent assigning the same staff member to overlapping events based on event date/time logic with intact prevention logic**
+- **Staff multiple position validation operations that prevent assigning the same staff member to multiple positions within the same event with intact prevention logic**
+- **UI warning generation operations that display clear warnings when assignment attempts violate double-booking rules**
+- Validate staff availability to prevent double-booking on same day
+- Validate customizable daily event limit with notification generation when user-defined limit is exceeded
+- Generate optional staff positions based on selected add-ons during event creation and editing
+- Filter staff by position eligibility for assignment dropdowns showing only qualified staff for each role using available job positions (both predefined and custom)
+- CRUD operations for user-created menu items only (no preset menu items) with subcategory configurations with fixed backend logic for proper saving and retrieval
+- CRUD operations for menu item subcategories with full functionality for adding, editing, and removing subcategories after menu item creation
+- **Automatic cleanup operations that remove menu items from events when menu items are deleted to prevent placeholder remnants**
+- **Enhanced menu item dropdown operations that display available user-created menu items for selection and automatically add selected items to events with subcategory population**
+- **Fully operational CRUD operations for inventory items including item name, description, price, and menu item assignments with robust API and UI state handling to prevent crashes or blank pages**
+- **Inventory item assignment operations linking items to menu items with proper relationship management and data integrity**
+- **Event cost calculation operations that automatically compute total costs based on selected inventory items assigned to menu items with real-time updates**
+- **Integration operations between inventory items and event creation/editing dialogs with cost summary display and automatic calculations**
+- **Inventory category organization operations for collapsible category management with default collapsed state and expand/collapse functionality**
+- Real-time menu item updates that affect event creation interface with immediate synchronization when new menu items are created
+- CRUD operations for custom staff positions created by users with immediate availability in assignment dropdowns and proper persistence without hardcoded constraints
+- **Automatic cleanup operations that remove job positions from staff profiles and events when positions are deleted to prevent placeholder remnants**
+- CRUD operations for user-created event add-ons with names and associated optional staff positions, available as selectable conditions for staffing rules
+- Event add-ons integration operations that dynamically integrate selected add-ons into event details and trigger associated staff requirements through the staffing calculator
+- **CRUD operations for user-created venue services in Profile section with names only (no venue, details, or cost fields) and immediate availability for venue assignment**
+- **Operations to manage venue services created in Profile section with proper persistence and availability for assignment to specific venues**
+- **Automatic cleanup operations that remove venue services from venues and events when services are deleted to prevent placeholder remnants**
+- Update confirmation status and detailed information for event details (excluding table setup) during creation and editing
+- Automatic confirmation of "Staff Assigned" detail when all required staff positions are filled based on user-defined staffing rules including conditional rules
+- Query events approaching deadline with missing details
+- Generate dashboard data showing outstanding items per client/event
+- Search and filter clients by first name, last name, or contact information
+- Filter staff by position for event assignments with eligibility checking using available job positions (both predefined and custom)
+- CRUD operations for email templates with titles and content
+- Retrieve events for calendar view display with proper formatting and client last names, optimized for displaying up to three client last names per day
+- Retrieve events for overview table sorted by date (soonest first) by default with option to sort by client name (A-Z)
+- Manage dynamic menu details based on user-created menu items and their subcategory configurations
+- Store and retrieve begin serving time and end serving time for each menu item
+- Store and retrieve multiple details for each selected menu item based on subcategory structure
+- Handle special request information for events
+- Calculate and create required staff positions dynamically based on user-defined staffing rules including conditional rules when guest count is provided with support for adding multiples of each position type
+- Generate optional staff positions when specific add-ons are selected during event creation and editing
+- Automatic archiving logic to filter past events from main views and provide archive access
+- Reliable staff position persistence operations to ensure selected positions from available job positions (both predefined and custom) are properly saved and retrieved for staff members during creation and editing with comprehensive error handling
+- Store and retrieve user's saved address for distance calculations
+- Store and retrieve per-mile cost value for travel cost calculations
+- Create new clients and venues during event creation flow with immediate persistence to the database and robust error handling
+- **Google Maps Distance Matrix API integration operations for precise geocoding and routing to reliably calculate exact one-way distances between user-entered locations**
+- **Automatic round-trip calculation operations that double the one-way driving route distance and multiply by user's cost per mile to determine total travel cost**
+- **Elimination of all MapQuest fallback routing operations to prevent inconsistencies and ensure reliable distance calculation using only Google Maps Distance Matrix API**
+- Real-time address auto-complete and validation operations using Google Maps API for venue details and travel settings to ensure precise address resolution
+- Store and retrieve calendar selected date state for highlighting
+- Generate urgent notification data with navigation information for clickable dropdown menu functionality
+- Delete all data operation that removes all events, clients, and venues from the database when confirmed by user
+- Store and retrieve customizable daily event limit setting configured by user
+- CRUD operations for user-defined staffing rules with guest count ranges and required staff counts for specific positions
+- **Fixed staffing rules operations ensuring input field values can be properly edited, deleted, and replaced with custom values without restrictions**
+- CRUD operations for user-defined conditional staffing rules with additional conditions based on event characteristics with proper formatting to prevent text overlap and reliable submission and saving functionality
+- CRUD operations for user-defined staffing rules with optional staff positions associated with specific add-ons
+- Validate staffing rules to prevent overlapping guest count ranges and ensure logical rule configuration
+- Calculate required staff positions in real-time based on current staffing rules including conditional rules and guest count
+- **Complete removal of all authorization restrictions and role-based access controls that prevent users from creating and managing clients, menu items, events, staff, and inventory**
+- **Comprehensive code review across frontend and backend logic to ensure no restrictions, validation issues, or missing dependencies prevent proper execution of event editing, staff generation, and inventory management functions**
+- **Thoroughly tested and cleaned up backend API calls, state updates, and data bindings to remove any restrictions or errors preventing functions from executing reliably**
+- **Thoroughly verified and corrected backend and API logic to ensure saving, loading, and viewing of events, clients, staff, menu data, and inventory works error-free**
+- **Complete removal of all hardcoded or backend-defined job position constraints that might prevent creation of custom positions**
+- **Thorough code review to remove redundant logic or blocked functionality that could interfere with job position creation, menu management, event creation, inventory management, or Google Maps integration**
+- **Complete removal of all conditions or permission checks that may prevent execution of event creation, staff rule creation, event saving operations, and inventory management**
+- **Verification that all related backend logic operates smoothly without restrictions or validation blocks**
+- Comprehensive error handling and validation for all backend operations to ensure reliability and proper user feedback with clear reporting of failures
+- Store and retrieve payment information including deposit amounts, total event costs, and payment status indicators for events
+- Store and retrieve venue services selection for events with ability to attach relevant services during event creation and editing
+- Operations for venue services selection during event creation and editing allowing users to attach relevant services from the venue's available services to each event
+- **Synchronized data operations ensuring staff assignments, inventory costs, venue services assignments, and event details are consistently updated and displayed across all views (event details, overview tables, calendar displays)**
+- **Comprehensive label deletion operations that automatically remove deleted job positions, venue services, and menu items from all associated venues, events, and staff assignments to prevent placeholder remnants and maintain data integrity**
+- **Color scheme management operations for storing and retrieving user's selected color scheme preference with persistence across sessions and smooth switching between the three available color schemes**
+- **Fixed `openEventModal` function operations in `src/assets/app.js` that properly pre-check staff checkboxes when editing an existing event by resetting all checkboxes first and then marking the ones whose values match any in `event.assignedStaff`**
+- **Enhanced `saveEvent` function operations in `src/assets/app.js` that properly collect `assignedStaff` values by gathering all checked staff values into an `assignedStaff` array, preserving current assigned staff from existing event if editing and array is empty, and explicitly adding the `assignedStaff` field to the payload**
+- **Corrected fetch or canister call operations (e.g. `actor.updateEvent`) to include the `assignedStaff` field ensuring it is transmitted with the rest of the event details for permanent staff assignment persistence**
+- **Verified synchronization operations between the `EditEventDialog` frontend component and backend event update logic ensuring the assigned staff array is accurately maintained on edit or update operations**

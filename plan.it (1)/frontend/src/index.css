@@ -1,0 +1,382 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    /* Purple Light Theme (Default) */
+    :root,
+    .purple-light {
+        --radius: 0.625rem;
+        --background: 0.98 0.01 280;
+        --foreground: 0.20 0.10 285;
+        --card: 1 0 0;
+        --card-foreground: 0.20 0.10 285;
+        --popover: 1 0 0;
+        --popover-foreground: 0.20 0.10 285;
+        --primary: 0.50 0.25 285;
+        --primary-foreground: 0.99 0.01 280;
+        --secondary: 0.60 0.22 295;
+        --secondary-foreground: 0.15 0.10 285;
+        --muted: 0.96 0.03 285;
+        --muted-foreground: 0.45 0.15 285;
+        --accent: 0.65 0.20 300;
+        --accent-foreground: 0.15 0.10 285;
+        --destructive: 0.55 0.22 25;
+        --destructive-foreground: 0.98 0 0;
+        --border: 0.90 0.06 285;
+        --input: 0.90 0.06 285;
+        --ring: 0.50 0.25 285;
+        --chart-1: 0.55 0.22 280;
+        --chart-2: 0.60 0.20 290;
+        --chart-3: 0.50 0.18 275;
+        --chart-4: 0.65 0.22 300;
+        --chart-5: 0.55 0.20 285;
+        --sidebar: 0.98 0.02 285;
+        --sidebar-foreground: 0.20 0.10 285;
+        --sidebar-primary: 0.50 0.25 285;
+        --sidebar-primary-foreground: 0.99 0.01 280;
+        --sidebar-accent: 0.95 0.04 290;
+        --sidebar-accent-foreground: 0.20 0.10 285;
+        --sidebar-border: 0.90 0.06 285;
+        --sidebar-ring: 0.50 0.25 285;
+    }
+
+    .purple-light body {
+        background: linear-gradient(135deg, 
+            oklch(0.99 0.02 50) 0%, 
+            oklch(0.98 0.04 45) 12%,
+            oklch(0.96 0.06 35) 25%,
+            oklch(0.97 0.03 15) 40%,
+            oklch(0.96 0.08 290) 60%,
+            oklch(0.97 0.10 285) 75%,
+            oklch(0.98 0.06 280) 90%,
+            oklch(0.99 0.02 275) 100%);
+        background-attachment: fixed;
+    }
+
+    /* Warm Sunset Theme */
+    .warm-sunset {
+        --radius: 0.625rem;
+        --background: 0.98 0.02 50;
+        --foreground: 0.25 0.08 30;
+        --card: 1 0 0;
+        --card-foreground: 0.25 0.08 30;
+        --popover: 1 0 0;
+        --popover-foreground: 0.25 0.08 30;
+        --primary: 0.60 0.20 35;
+        --primary-foreground: 0.99 0.01 50;
+        --secondary: 0.65 0.18 25;
+        --secondary-foreground: 0.20 0.08 30;
+        --muted: 0.96 0.04 40;
+        --muted-foreground: 0.50 0.12 35;
+        --accent: 0.70 0.22 45;
+        --accent-foreground: 0.20 0.08 30;
+        --destructive: 0.55 0.22 25;
+        --destructive-foreground: 0.98 0 0;
+        --border: 0.92 0.05 40;
+        --input: 0.92 0.05 40;
+        --ring: 0.60 0.20 35;
+        --chart-1: 0.60 0.20 35;
+        --chart-2: 0.65 0.18 25;
+        --chart-3: 0.55 0.16 45;
+        --chart-4: 0.70 0.22 50;
+        --chart-5: 0.58 0.18 30;
+        --sidebar: 0.98 0.03 45;
+        --sidebar-foreground: 0.25 0.08 30;
+        --sidebar-primary: 0.60 0.20 35;
+        --sidebar-primary-foreground: 0.99 0.01 50;
+        --sidebar-accent: 0.95 0.05 40;
+        --sidebar-accent-foreground: 0.25 0.08 30;
+        --sidebar-border: 0.92 0.05 40;
+        --sidebar-ring: 0.60 0.20 35;
+    }
+
+    .warm-sunset body {
+        background: linear-gradient(135deg,
+            oklch(0.99 0.03 60) 0%,
+            oklch(0.98 0.05 55) 15%,
+            oklch(0.96 0.08 45) 30%,
+            oklch(0.97 0.06 35) 45%,
+            oklch(0.96 0.10 25) 60%,
+            oklch(0.97 0.08 20) 75%,
+            oklch(0.98 0.05 30) 90%,
+            oklch(0.99 0.02 40) 100%);
+        background-attachment: fixed;
+    }
+
+    /* Cool Ocean Theme */
+    .cool-ocean {
+        --radius: 0.625rem;
+        --background: 0.97 0.02 220;
+        --foreground: 0.22 0.10 230;
+        --card: 1 0 0;
+        --card-foreground: 0.22 0.10 230;
+        --popover: 1 0 0;
+        --popover-foreground: 0.22 0.10 230;
+        --primary: 0.55 0.18 230;
+        --primary-foreground: 0.99 0.01 220;
+        --secondary: 0.60 0.16 200;
+        --secondary-foreground: 0.18 0.10 230;
+        --muted: 0.95 0.04 220;
+        --muted-foreground: 0.48 0.12 225;
+        --accent: 0.65 0.20 190;
+        --accent-foreground: 0.18 0.10 230;
+        --destructive: 0.55 0.22 25;
+        --destructive-foreground: 0.98 0 0;
+        --border: 0.90 0.06 220;
+        --input: 0.90 0.06 220;
+        --ring: 0.55 0.18 230;
+        --chart-1: 0.55 0.18 230;
+        --chart-2: 0.60 0.16 200;
+        --chart-3: 0.50 0.14 210;
+        --chart-4: 0.65 0.20 190;
+        --chart-5: 0.58 0.16 220;
+        --sidebar: 0.97 0.03 220;
+        --sidebar-foreground: 0.22 0.10 230;
+        --sidebar-primary: 0.55 0.18 230;
+        --sidebar-primary-foreground: 0.99 0.01 220;
+        --sidebar-accent: 0.94 0.05 215;
+        --sidebar-accent-foreground: 0.22 0.10 230;
+        --sidebar-border: 0.90 0.06 220;
+        --sidebar-ring: 0.55 0.18 230;
+    }
+
+    .cool-ocean body {
+        background: linear-gradient(135deg,
+            oklch(0.98 0.03 240) 0%,
+            oklch(0.97 0.05 235) 15%,
+            oklch(0.95 0.08 225) 30%,
+            oklch(0.96 0.06 215) 45%,
+            oklch(0.95 0.10 205) 60%,
+            oklch(0.96 0.08 195) 75%,
+            oklch(0.97 0.05 210) 90%,
+            oklch(0.98 0.02 220) 100%);
+        background-attachment: fixed;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply text-foreground;
+        min-height: 100vh;
+    }
+
+    /* Custom scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    @media (min-width: 640px) {
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    ::-webkit-scrollbar-track {
+        background: oklch(0.97 0.01 var(--primary-hue, 285));
+        border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, 
+            oklch(var(--primary)) 0%, 
+            oklch(var(--secondary)) 100%);
+        border-radius: 6px;
+        border: 2px solid oklch(0.97 0.01 var(--primary-hue, 285));
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, 
+            oklch(0.60 0.24 var(--primary-hue, 285)) 0%, 
+            oklch(0.65 0.22 var(--secondary-hue, 295)) 100%);
+    }
+
+    /* Firefox scrollbar */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: oklch(var(--primary)) oklch(0.97 0.01 var(--primary-hue, 285));
+    }
+
+    /* Enhanced time picker styling */
+    input[type="time"] {
+        cursor: pointer;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        padding: 0.5rem 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        input[type="time"] {
+            font-size: 1rem;
+        }
+    }
+
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        filter: opacity(0.7);
+        transition: filter 0.2s;
+        margin-left: 0.5rem;
+    }
+
+    input[type="time"]::-webkit-calendar-picker-indicator:hover {
+        filter: opacity(1);
+    }
+
+    /* Improve time picker dropdown visibility */
+    input[type="time"]::-webkit-datetime-edit-fields-wrapper {
+        padding: 0.25rem;
+    }
+
+    input[type="time"]::-webkit-datetime-edit-hour-field,
+    input[type="time"]::-webkit-datetime-edit-minute-field,
+    input[type="time"]::-webkit-datetime-edit-ampm-field {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        transition: background-color 0.2s;
+    }
+
+    input[type="time"]::-webkit-datetime-edit-hour-field:focus,
+    input[type="time"]::-webkit-datetime-edit-minute-field:focus,
+    input[type="time"]::-webkit-datetime-edit-ampm-field:focus {
+        background-color: oklch(var(--primary) / 0.15);
+        outline: none;
+    }
+
+    /* Firefox time picker styling */
+    input[type="time"]::-moz-focus-inner {
+        border: 0;
+    }
+
+    /* Ensure time picker list is scrollable and visible */
+    input[type="time"]::-webkit-list-button {
+        height: 2rem;
+    }
+
+    /* Enhanced calendar/date picker popup styling - responsive */
+    [data-radix-popper-content-wrapper] {
+        z-index: 50;
+    }
+
+    /* Make calendar popup larger and more spacious */
+    .rdp {
+        --rdp-cell-size: 40px;
+        --rdp-accent-color: oklch(var(--primary));
+        --rdp-background-color: oklch(var(--primary) / 0.1);
+        margin: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        .rdp {
+            --rdp-cell-size: 48px;
+            margin: 1rem;
+        }
+    }
+
+    .rdp-months {
+        gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+        .rdp-months {
+            gap: 1.5rem;
+        }
+    }
+
+    .rdp-month {
+        gap: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        .rdp-month {
+            gap: 1rem;
+        }
+    }
+
+    .rdp-caption {
+        margin-bottom: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        .rdp-caption {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .rdp-caption_label {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    @media (min-width: 640px) {
+        .rdp-caption_label {
+            font-size: 1.125rem;
+        }
+    }
+
+    .rdp-head_cell {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.375rem;
+    }
+
+    @media (min-width: 640px) {
+        .rdp-head_cell {
+            font-size: 0.875rem;
+            padding: 0.5rem;
+        }
+    }
+
+    .rdp-cell {
+        padding: 0.125rem;
+    }
+
+    @media (min-width: 640px) {
+        .rdp-cell {
+            padding: 0.25rem;
+        }
+    }
+
+    .rdp-day {
+        width: var(--rdp-cell-size);
+        height: var(--rdp-cell-size);
+        font-size: 0.875rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    @media (min-width: 640px) {
+        .rdp-day {
+            font-size: 0.9375rem;
+        }
+    }
+
+    .rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_disabled) {
+        background-color: oklch(var(--primary) / 0.1);
+        transform: scale(1.05);
+    }
+
+    .rdp-day_selected {
+        background-color: oklch(var(--primary));
+        color: oklch(var(--primary-foreground));
+        font-weight: 600;
+        box-shadow: 0 2px 8px oklch(var(--primary) / 0.3);
+    }
+
+    .rdp-day_today:not(.rdp-day_selected) {
+        font-weight: 600;
+        color: oklch(var(--primary));
+        background-color: oklch(var(--primary) / 0.05);
+    }
+
+    /* Touch-friendly tap targets for mobile */
+    @media (max-width: 639px) {
+        button, a, [role="button"] {
+            min-height: 44px;
+            min-width: 44px;
+        }
+    }
+}
